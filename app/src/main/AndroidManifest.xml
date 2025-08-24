@@ -13,7 +13,8 @@
         android:theme="@style/Theme.MultiNote">
         <activity
             android:name=".AddNoteActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.MultiNote.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

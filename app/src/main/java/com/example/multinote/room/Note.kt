@@ -1,4 +1,4 @@
-package com.example.multinote
+package com.example.multinote.room
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -8,7 +8,5 @@ data class Note(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val title: String,
     val content: String,
-    val date: String,
-    val timestamp: Long,
-    val isPinned: Boolean = false
+    val timestamp: Long = System.currentTimeMillis()
 )
