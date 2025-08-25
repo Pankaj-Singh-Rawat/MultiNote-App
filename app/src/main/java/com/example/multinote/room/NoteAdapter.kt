@@ -9,12 +9,13 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.multinote.room.Note
 
-class NoteAdapter : ListAdapter<Note, NoteAdapter.NoteViewHolder>(NoteDiffCallback()) {
+class NoteAdapter(private val onClick: (Note) -> Unit)
+    : ListAdapter<Note, NoteAdapter.NoteViewHolder>(NoteDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_note, parent, false)
-        return NoteViewHolder(view)
+        return NoteViewHolder(view, onClick) // pass click lambda here
     }
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
@@ -22,11 +23,23 @@ class NoteAdapter : ListAdapter<Note, NoteAdapter.NoteViewHolder>(NoteDiffCallba
         holder.bind(note)
     }
 
-    class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class NoteViewHolder(itemView: View, val onClick: (Note) -> Unit)
+        : RecyclerView.ViewHolder(itemView) {
+
         private val titleText: TextView = itemView.findViewById(R.id.noteTitle)
         private val contentText: TextView = itemView.findViewById(R.id.noteContent)
+        private var currentNote: Note? = null
+
+        init {
+            itemView.setOnClickListener {
+                currentNote?.let { note ->
+                    onClick(note)
+                }
+            }
+        }
 
         fun bind(note: Note) {
+            currentNote = note
             titleText.text = note.title
             contentText.text = note.content
         }
