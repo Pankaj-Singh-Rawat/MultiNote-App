@@ -61,7 +61,7 @@ class AddNoteActivity : AppCompatActivity() {
             delay(600)
 
             if (title.isEmpty() && content.isEmpty()) {
-                // If user cleared everything and note already exists → delete
+                // If the note exists, delete it; if new, do nothing
                 currentNote?.let { existingNote ->
                     noteViewModel.delete(existingNote)
                     currentNote = null
@@ -69,17 +69,16 @@ class AddNoteActivity : AppCompatActivity() {
                 return@launch
             }
 
-            val note = currentNote?.copy(
-                title = title,
-                content = content
-            ) ?: Note(title = title, content = content)
-
-            if (title.isEmpty() && content.isEmpty() && currentNote != null) {
-                noteViewModel.delete(currentNote!!)
-                currentNote = null
+            if (currentNote == null) {
+                // New note → insert and get ID
+                val newNote = Note(title = title, content = content)
+                val id = noteViewModel.insertAndReturnId(newNote) // suspend function
+                currentNote = newNote.copy(id = id)
             } else {
-                noteViewModel.update(note)
-                currentNote = note
+                // Existing note → update
+                val updatedNote = currentNote!!.copy(title = title, content = content)
+                noteViewModel.update(updatedNote)
+                currentNote = updatedNote
             }
         }
     }
