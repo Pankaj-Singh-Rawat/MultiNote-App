@@ -30,4 +30,8 @@ class NoteViewModel(application: Application) : AndroidViewModel(application) {
     suspend fun insertAndReturnId(note: Note): Long {
         return repository.insertAndReturnId(note)
     }
+
+    fun insert(note: Note) = viewModelScope.launch {
+        repository.insert(note)
+    }
 }

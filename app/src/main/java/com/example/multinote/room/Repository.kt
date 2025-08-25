@@ -17,4 +17,8 @@ class NoteRepository(private val noteDao: NoteDao) {
     suspend fun insertAndReturnId(note: Note): Long {
         return noteDao.insert(note)
     }
+
+    suspend fun insert(note: Note): Long {
+        return noteDao.insert(note)
+    }
 }
