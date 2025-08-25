@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.multinote.viewmodel.NoteViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import androidx.core.graphics.drawable.toDrawable
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,7 +27,15 @@ class MainActivity : AppCompatActivity() {
         val fab = findViewById<FloatingActionButton>(R.id.fabAddNote)
         val emptyMessage = findViewById<TextView>(R.id.emptyMessage)
 
-        adapter = NoteAdapter()
+        adapter = NoteAdapter { note ->
+            val intent = Intent(this, AddNoteActivity::class.java)
+            intent.putExtra("noteId", note.id)
+            intent.putExtra("noteTitle", note.title)
+            intent.putExtra("noteContent", note.content)
+            startActivity(intent)
+        }
+
+
         recyclerView.layoutManager = GridLayoutManager(this, 2)
         recyclerView.adapter = adapter
         recyclerView.setHasFixedSize(true)
@@ -64,7 +73,7 @@ class MainActivity : AppCompatActivity() {
                 isCurrentlyActive: Boolean
             ) {
                 val itemView = viewHolder.itemView
-                val background = android.graphics.drawable.ColorDrawable(android.graphics.Color.RED)
+                val background = android.graphics.Color.RED.toDrawable()
                 val icon = androidx.core.content.ContextCompat.getDrawable(
                     this@MainActivity,
                     R.drawable.ic_delete
@@ -79,7 +88,7 @@ class MainActivity : AppCompatActivity() {
                     icon?.setBounds(
                         itemView.left + iconMargin,
                         iconTop,
-                        itemView.left + iconMargin + (icon?.intrinsicWidth ?: 0),
+                        itemView.left + iconMargin + icon.intrinsicWidth,
                         iconBottom
                     )
                 } else {

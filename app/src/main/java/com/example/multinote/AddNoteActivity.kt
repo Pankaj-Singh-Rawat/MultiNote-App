@@ -26,6 +26,22 @@ class AddNoteActivity : AppCompatActivity() {
         val titleInput = findViewById<EditText>(R.id.editTitle)
         val contentInput = findViewById<EditText>(R.id.editContent)
 
+        // 1. Get data from intent
+        val noteId = intent.getLongExtra("noteId", 0L)
+        val noteTitle = intent.getStringExtra("noteTitle") ?: ""
+        val noteContent = intent.getStringExtra("noteContent") ?: ""
+
+        // 2. If noteId != 0 → it's an existing note
+        currentNote = if (noteId != 0L) {
+            Note(id = noteId, title = noteTitle, content = noteContent)
+        } else {
+            null
+        }
+
+        // 3. Set text to EditTexts
+        titleInput.setText(noteTitle)
+        contentInput.setText(noteContent)
+
         val watcher = object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 autoSave(titleInput.text.toString(), contentInput.text.toString())
@@ -58,9 +74,9 @@ class AddNoteActivity : AppCompatActivity() {
                 content = content
             ) ?: Note(title = title, content = content)
 
-            if (currentNote == null) {
-                val id = noteViewModel.insertAndReturnId(note)
-                currentNote = note.copy(id = id.toInt().toLong())
+            if (title.isEmpty() && content.isEmpty() && currentNote != null) {
+                noteViewModel.delete(currentNote!!)
+                currentNote = null
             } else {
                 noteViewModel.update(note)
                 currentNote = note
