@@ -36,21 +36,18 @@ Create, edit, auto-save, and organize your notes with ease.
 ---
 
 ## 📂 Project Structure
+├── MainActivity.kt         # Displays notes in RecyclerView
+├── AddNoteActivity.kt      # Create/Edit notes with auto-save
 │
-├── MainActivity.kt # Displays notes in RecyclerView
-├── AddNoteActivity.kt # Create/Edit notes with auto-save
-│
-├── adapter/
-│ └── NoteAdapter.kt # RecyclerView adapter for notes
+├── NoteAdapter.kt          # RecyclerView adapter for notes
 │
 ├── room/
-│ ├── Note.kt # Data class (Entity)
-│ ├── NoteDao.kt # Database operations (DAO)
-│ └── NoteDatabase.kt # Room database
+│   ├── Note.kt             # Data class (Entity)
+│   ├── NoteDao.kt          # Database operations (DAO)
+│   └── NoteDatabase.kt     # Room database
 │
-├── viewmodel/
-│ └── NoteViewModel.kt # Handles data between UI & DB
-
+└── viewmodel/
+    └── NoteViewModel.kt    # Handles data between UI & DB
 
 ---
 
