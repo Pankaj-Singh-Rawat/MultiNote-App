@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.multinote.viewmodel.NoteViewModel
@@ -25,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         val emptyMessage = findViewById<TextView>(R.id.emptyMessage)
 
         adapter = NoteAdapter()
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = GridLayoutManager(this, 2)
         recyclerView.adapter = adapter
 
         // Observe LiveData from ViewModel

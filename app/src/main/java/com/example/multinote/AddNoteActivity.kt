@@ -30,6 +30,7 @@ class AddNoteActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
                 autoSave(titleInput.text.toString(), contentInput.text.toString())
             }
+
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         }
@@ -39,20 +40,29 @@ class AddNoteActivity : AppCompatActivity() {
     }
 
     private fun autoSave(title: String, content: String) {
-        saveJob?.cancel() // cancel previous job (debounce)
+        saveJob?.cancel()
         saveJob = MainScope().launch {
-            delay(600) // wait 0.6 sec after typing stops
-            if (title.isNotEmpty() || content.isNotEmpty()) {
-                val note = currentNote?.copy(
-                    title = title,
-                    content = content
-                ) ?: Note(title = title, content = content)
+            delay(600)
 
-                if (currentNote == null) {
-                    noteViewModel.insert(note)  // first time
-                } else {
-                    noteViewModel.update(note)  // subsequent edits
+            if (title.isEmpty() && content.isEmpty()) {
+                // If user cleared everything and note already exists → delete
+                currentNote?.let { existingNote ->
+                    noteViewModel.delete(existingNote)
+                    currentNote = null
                 }
+                return@launch
+            }
+
+            val note = currentNote?.copy(
+                title = title,
+                content = content
+            ) ?: Note(title = title, content = content)
+
+            if (currentNote == null) {
+                val id = noteViewModel.insertAndReturnId(note)
+                currentNote = note.copy(id = id.toInt().toLong())
+            } else {
+                noteViewModel.update(note)
                 currentNote = note
             }
         }
