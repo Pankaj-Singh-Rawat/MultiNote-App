@@ -36,6 +36,7 @@ Create, edit, auto-save, and organize your notes with ease.
 ---
 
 ## 📂 Project Structure
+```text
 ├── MainActivity.kt         # Displays notes in RecyclerView
 ├── AddNoteActivity.kt      # Create/Edit notes with auto-save
 │
@@ -48,7 +49,7 @@ Create, edit, auto-save, and organize your notes with ease.
 │
 └── viewmodel/
     └── NoteViewModel.kt    # Handles data between UI & DB
-
+```
 ---
 
 ## ⚡ How It Works
